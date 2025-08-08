@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>새우 색 도감 + 돌연변이 예측기 v1.1</title>
+  <style>
+    body{font-family: Arial, sans-serif;background:#f2fbff;color:#083b4c;margin:0;padding:16px;}
+    h1{text-align:center;color:#0b77a6;margin:8px 0 4px;}
+    .sub{font-size:12px;text-align:center;color:#3f6b7a;margin-bottom:16px;}
+    .card{background:#fff;border:1px solid #b9deee;border-radius:12px;padding:14px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:860px){ .row{grid-template-columns:1fr} }
+    label{display:block;margin:10px 0 4px;font-size:13px;color:#0b5b7a}
+    select{width:100%;padding:10px;border:1px solid #9ed3e7;border-radius:10px;background:#f8fdff}
+    button{padding:10px 14px;border:none;border-radius:10px;cursor:pointer;font-weight:700}
+    button.primary{background:#0aa3d8;color:#fff}
+    button.secondary{background:#e6f7fc;color:#055b7a;border:1px solid #9ed3e7}
+    .result{background:#fff;border:1px dashed #8ed1ea;border-radius:12px;padding:14px}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #cfeaf3;border-radius:999px;background:#f6fbfd;margin:4px}
+    .swatch{width:18px;height:18px;border:1px solid #8aa;border-radius:4px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+    .preview{border:1px solid #cfeaf3;border-radius:8px;overflow:hidden;background:#fff;height:80px}
+    .footer{font-size:12px;color:#4c6f7d;text-align:center;margin-top:10px}
+  </style>
+</head>
+<body>
+  <h1>🦐 새우 색 도감 + 돌연변이 예측기 <span style="font-size:12px;">v1.1</span></h1>
+  <div class="sub">이미지 없이 색상 칩으로만 표시되는 경량 버전 · 모바일 반응형</div>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label>부모 A - 종류</label>
+        <select id="typeA"></select>
+        <label>부모 A - 색상</label>
+        <select id="colorA"></select>
+      </div>
+      <div>
+        <label>부모 B - 종류</label>
+        <select id="typeB"></select>
+        <label>부모 B - 색상</label>
+        <select id="colorB"></select>
+      </div>
+    </div>
+    <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap">
+      <button class="primary" id="btnPredict">🎲 예측하기</button>
+      <button class="secondary" id="btnSwap">↔️ 부모 바꾸기</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div id="result" class="result">부모를 선택하고 <b>예측하기</b>를 눌러 주세요.</div>
+  </div>
+
+  <div class="card">
+    <div class="grid" id="catalog"></div>
+  </div>
+
+  <div class="footer">제작: 민후 × GPT · 본 도구는 취미/교육용 예측이며 실제 결과는 개체/라인에 따라 달라질 수 있어요.</div>
+
+<script>
+const SPECIES = {
+  "neocaridina": { label:"생이새우", colors:["투명","갈색","회색","빨강","주황","노랑","초록","청록","파랑","남색","보라","검정","백색반점","황금빛","구리빛"] },
+  "caridina": { label:"크리스탈/타이완비", colors:["흰색","검정","빨강","파랑(블루볼트)","판다무늬","킹콩블랙","루비레드","모스라","스노우화이트"] },
+  "amano": { label:"야마토새우", colors:["반투명","회갈색점무늬","회색줄무늬"] }
+};
+const COLOR_SWATCH = {
+  "투명":"linear-gradient(45deg,#ffffff 25%, #e9f6fb 25% 50%, #ffffff 50% 75%, #e9f6fb 75%)",
+  "갈색":"#7a5a3a","회색":"#9aa3a8","빨강":"#e63232","주황":"#f59a23","노랑":"#ffd54a",
+  "초록":"#47b26b","청록":"#3db7b4","파랑":"#2f82ff","남색":"#1f3b8a","보라":"#7a4fd6",
+  "검정":"#111","백색반점":"repeating-linear-gradient(45deg,#ffffff 0 6px,#ffffff 6px 10px,#eaeaea 10px 16px)",
+  "황금빛":"#cfa73a","구리빛":"#b5692f",
+  "흰색":"#ffffff","파랑(블루볼트)":"#9fd3ff","판다무늬":"linear-gradient(90deg,#000 33%,#fff 33% 66%,#000 66%)",
+  "킹콩블랙":"#000000","루비레드":"#b9001a","모스라":"linear-gradient(90deg,#fff 50%,#000 50%)","스노우화이트":"#f7fbff",
+  "반투명":"linear-gradient(45deg,#ffffff 25%, #e9f6fb 25% 50%, #ffffff 50% 75%, #e9f6fb 75%)",
+  "회갈색점무늬":"repeating-radial-gradient(circle at 10px 10px,#9c7b5a 0 2px, #f3eee7 2px 8px)",
+  "회색줄무늬":"repeating-linear-gradient(90deg,#9aa3a8 0 8px,#c8d2d8 8px 16px)"
+};
+
+const typeA = document.getElementById('typeA');
+const typeB = document.getElementById('typeB');
+const colorA = document.getElementById('colorA');
+const colorB = document.getElementById('colorB');
+const result = document.getElementById('result');
+const catalog = document.getElementById('catalog');
+
+function fillSpeciesOptions(){
+  for (const key in SPECIES){
+    let oA = document.createElement('option');
+    oA.value = key; oA.textContent = SPECIES[key].label;
+    let oB = oA.cloneNode(true);
+    typeA.appendChild(oA); typeB.appendChild(oB);
+  }
+  typeA.value = 'neocaridina'; typeB.value = 'neocaridina';
+  fillColorOptions(typeA.value, colorA);
+  fillColorOptions(typeB.value, colorB);
+}
+function fillColorOptions(species, sel){
+  sel.innerHTML = '';
+  SPECIES[species].colors.forEach(c=>{
+    let o = document.createElement('option');
+    o.value = c; o.textContent = c;
+    sel.appendChild(o);
+  });
+}
+function blendedColor(c1,c2){
+  if(c1==="검정"||c2==="검정")return"검정";
+  const set = new Set([c1,c2]);
+  if(set.has("빨강")&&set.has("노랑"))return"주황";
+  if(set.has("파랑")&&set.has("노랑"))return"초록";
+  if(set.has("빨강")&&set.has("파랑"))return"보라";
+  if(set.has("파랑")&&set.has("초록"))return"청록";
+  if(set.has("갈색")||set.has("회색"))return"갈색";
+  if(set.has("흰색")&&set.has("검정"))return"판다무늬";
+  return "회색";
+}
+function mutationPredict(a,b){
+  if(a.species!==b.species){
+    return {compatible:false, reason:"다른 종이라 교배 불가 또는 번식 성공률이 매우 낮아요.", probs:[]};
+  }
+  let probs=[];
+  if(a.color===b.color){
+    probs.push({color:a.color,p:75});
+    probs.push({color:"회색",p:15});
+    probs.push({color:a.species==="caridina"?"스노우화이트":"투명",p:10});
+    return {compatible:true, probs};
+  }
+  probs.push({color:blendedColor(a.color,b.color),p:35});
+  probs.push({color:a.color,p:20});
+  probs.push({color:b.color,p:20});
+  probs.push({color:"갈색",p:15});
+  probs.push({color:a.species==="caridina"?"스노우화이트":"투명",p:10});
+  return {compatible:true, probs};
+}
+function renderResult(out){
+  if(!out.compatible){ result.innerHTML=`⚠️ ${out.reason}`; return; }
+  result.innerHTML = out.probs.map(x=>`<span class="chip"><span class="swatch" style="background:${COLOR_SWATCH[x.color]||'#ddd'}"></span>${x.color} <b>${x.p}%</b></span>`).join('');
+}
+btnPredict.onclick = ()=>{
+  let a = {species:typeA.value, color:colorA.value};
+  let b = {species:typeB.value, color:colorB.value};
+  renderResult(mutationPredict(a,b));
+};
+btnSwap.onclick = ()=>{
+  let ta=typeA.value, tb=typeB.value, ca=colorA.value, cb=colorB.value;
+  typeA.value=tb; typeB.value=ta;
+  fillColorOptions(typeA.value,colorA); fillColorOptions(typeB.value,colorB);
+  colorA.value=cb; colorB.value=ca;
+};
+function buildCatalog(){
+  let html='';
+  for(const key in SPECIES){
+    SPECIES[key].colors.forEach(c=>{
+      html+=`<div class="preview" title="${SPECIES[key].label} - ${c}" style="background:${COLOR_SWATCH[c]||'#ddd'}"></div>`;
+    });
+  }
+  catalog.innerHTML=html;
+}
+fillSpeciesOptions();
+buildCatalog();
+</script>
+</body>
+</html>
