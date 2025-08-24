@@ -1,125 +1,147 @@
+# Remove the example image functionality from the HTML, defaulting to color swatches only
+
+html_v11_no_img = """
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0b77a6">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
-  <title>새우 색 도감 + 돌연변이 예측기 v1.4</title>
-  <style>
-    body{font-family: Arial, sans-serif;background:#f2fbff;color:#083b4c;margin:0;padding:16px;}
-    .title-wrapper{display:flex;align-items:center;justify-content:center;gap:8px;}
-    h1{text-align:center;color:#0b77a6;margin:8px 0;font-size: 28px;}
-    @media (max-width: 420px){ h1 {font-size: 22px;} }
-    #btnShare{background:transparent;border:none;font-size:22px;cursor:pointer;padding:0 4px;color:#0b77a6;}
-
-    .sub{font-size:12px;text-align:center;color:#3f6b7a;margin-bottom:16px;}
-    .card{background:#fff;border:1px solid #b9deee;border-radius:12px;padding:14px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:860px){ .row{grid-template-columns:1fr} }
-    label{display:block;margin:10px 0 4px;font-size:13px;color:#0b5b7a}
-    select{width:100%;padding:10px;border:1px solid #9ed3e7;border-radius:10px;background:#f8fdff}
-    button{padding:10px 14px;border:none;border-radius:10px;cursor:pointer;font-weight:700}
-    button.primary{background:#0aa3d8;color:#fff}
-    button.secondary{background:#e6f7fc;color:#055b7a;border:1px solid #9ed3e7}
-    .result{background:#fff;border:1px dashed #8ed1ea;border-radius:12px;padding:14px}
-    .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #cfeaf3;border-radius:999px;background:#f6fbfd;margin:4px}
-    .swatch{width:18px;height:18px;border:1px solid #8aa;border-radius:4px; background-size: cover;}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
-    .preview{border:1px solid #cfeaf3;border-radius:8px;overflow:hidden;background-size: cover; height:80px}
-    .footer{font-size:12px;color:#4c6f7d;text-align:center;margin-top:10px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>새우 색 도감 + 돌연변이 예측기 </title>
+<link rel="icon" type="image/png" href="ChatGPT Image 2025년 8월 23일 오후 01_29_15.png">
+<style>
+  body{font-family: Arial, sans-serif;background:#f2fbff;color:#155209;padding:16px;}
+  h1{text-align:center;color:#ffa3a3;}h2{text-align:center;color:#ffffff;}
+  .card{background:#fff;border:1px solid #eeb9b9;border-radius:12px;padding:14px;margin-bottom:16px;}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  label{display:block;margin:10px 0 4px;font-size:13px;color:#0b5b7a;}
+  select{width:100%;padding:10px;border:1px solid #9ed3e7;border-radius:10px;}
+  button{padding:10px 14px;border:none;border-radius:10px;cursor:pointer;font-weight:700;}
+  button.primary{background:#0aa3d8;color:white;}
+  .result{background:#fff;border:1px dashed #2b9981;border-radius:12px;padding:14px;}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #cfeaf3;border-radius:999px;background:#f6fbfd;margin:4px;}
+  .swatch{width:18px;height:18px;border:1px solid #8aa;border-radius:4px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;}
+  .preview{border:1px solid #cfeaf3;border-radius:8px;overflow:hidden;background:#fff;height:80px;}
+</style>
 </head>
 <body>
-  <div class="title-wrapper">
-    <h1>🦐 새우 색 도감 + 돌연변이 예측기 <span style="font-size:12px;">v1.4</span></h1>
-    <button id="btnShare" title="공유하기">🔗</button>
-  </div>
-  <div class="sub">이미지 없이 색상 칩으로만 표시되는 경량 버전 · 모바일 반응형</div>
-
-  <div class="card">
-    <div class="row">
-      <div>
-        <label>부모 A - 종류</label>
-        <select id="typeA"></select>
-        <label>부모 A - 색상</label>
-        <select id="colorA"></select>
-      </div>
-      <div>
-        <label>부모 B - 종류</label>
-        <select id="typeB"></select>
-        <label>부모 B - 색상</label>
-        <select id="colorB"></select>
-      </div>
+<h1>🦐 새우 색 도감 + 돌연변이 예측기 <span style="font-size:12px;"></span></h1>
+<div class="card">
+  <div class="row">
+    <div>
+      <label>🦐부모 A - 종류</label>
+      <select id="typeA"></select>
+      <label>🦐부모 A - 색상</label>
+      <select id="colorA"></select>
     </div>
-    <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap">
-      <button class="primary" id="btnPredict">🎲 예측하기</button>
-      <button class="secondary" id="btnSwap">↔️ 부모 바꾸기</button>
-      <button class="secondary" id="btnAddShortcut" style="display:none;">📲 바로가기 설치</button>
+    <div>
+      <label>🦐부모 B - 종류</label>
+      <select id="typeB"></select>
+      <label>🦐부모 B - 색상</label>
+      <select id="colorB"></select>
     </div>
   </div>
-
-  <div class="card">
-    <div id="result" class="result">부모를 선택하고 <b>예측하기</b>를 눌러 주세요.</div>
+  <div style="margin-top:12px;">
+    <button class="primary" id="btnPredict">🎲 예측하기</button>
+    <button id="btnSwap">↔️ 🦐부모 바꾸기</button>
   </div>
-
-  <div class="card">
-    <div class="grid" id="catalog"></div>
-  </div>
-
-  <div class="footer">제작: 민후 × GPT · 본 도구는 취미/교육용 예측이며 실제 결과는 개체/라인에 따라 달라질 수 있어요.</div>
-
+</div>
+<div class="card">
+  <div id="result" class="result">부모의 종류를 1가지 선택하고 <b>'🎲 예측하기'버튼</b>을 눌러 주세요.</div>
+</div>
+<div class="card">
+  <div class="grid" id="catalog"></div>
+</div>
 <script>
-const SPECIES = { "neocaridina": { label:"생이새우", colors:["투명","갈색","회색","빨강","주황","노랑","초록","청록","파랑","남색","보라","검정","백색반점","황금빛","구리빛"] }, "caridina": { label:"크리스탈/타이완비", colors:["흰색","검정","빨강","파랑(블루볼트)","판다무늬","킹콩블랙","루비레드","모스라","스노우화이트"] }, "amano": { label:"야마토새우", colors:["반투명","회갈색점무늬","회색줄무늬"] } };
-const COLOR_SWATCH = { "투명":"linear-gradient(45deg,#ffffff 25%, #e9f6fb 25% 50%, #ffffff 50% 75%, #e9f6fb 75%)","갈색":"#7a5a3a","회색":"#9aa3a8","빨강":"#e63232","주황":"#f59a23","노랑":"#ffd54a","초록":"#47b26b","청록":"#3db7b4","파랑":"#2f82ff","남색":"#1f3b8a","보라":"#7a4fd6","검정":"#111","백색반점":"repeating-linear-gradient(45deg,#ffffff 0 6px,#ffffff 6px 10px,#eaeaea 10px 16px)","황금빛":"#cfa73a","구리빛":"#b5692f","흰색":"#ffffff","파랑(블루볼트)":"#9fd3ff","판다무늬":"linear-gradient(90deg,#000 33%,#fff 33% 66%,#000 66%)","킹콩블랙":"#000000","루비레드":"#b9001a","모스라":"linear-gradient(90deg,#fff 50%,#000 50%)","스노우화이트":"#f7fbff","반투명":"linear-gradient(45deg,#ffffff 25%, #e9f6fb 25% 50%, #ffffff 50% 75%, #e9f6fb 75%)","회갈색점무늬":"repeating-radial-gradient(circle at 10px 10px,#9c7b5a 0 2px, #f3eee7 2px 8px)","회색줄무늬":"repeating-linear-gradient(90deg,#9aa3a8 0 8px,#c8d2d8 8px 16px)" };
-const SHRIMP_PATTERNS = [ "radial-gradient(ellipse 50% 100% at 50% 0%, transparent 60%, rgba(0,0,0,0.1) 61%, transparent 62%)","radial-gradient(circle at 25% 30%, rgba(0,0,0,0.15) 10%, transparent 11%), radial-gradient(circle at 65% 70%, rgba(0,0,0,0.1) 12%, transparent 13%)","linear-gradient(135deg, transparent 45%, rgba(0,0,0,0.1) 45% 55%, transparent 55%)","radial-gradient(ellipse 100% 50% at 0% 100%, transparent 60%, rgba(0,0,0,0.1) 61%, transparent 62%)","transparent" ];
-
-const typeA = document.getElementById('typeA'),typeB = document.getElementById('typeB'),colorA = document.getElementById('colorA'),colorB = document.getElementById('colorB'),result = document.getElementById('result'),catalog = document.getElementById('catalog'),btnPredict = document.getElementById('btnPredict'),btnSwap = document.getElementById('btnSwap'),btnShare = document.getElementById('btnShare'),btnAddShortcut = document.getElementById('btnAddShortcut');
-
-function fillSpeciesOptions(){ 
-  for (const key in SPECIES){ 
-    let oA = document.createElement('option'); oA.value = key; 
-    oA.textContent = SPECIES[key].label; let oB = oA.cloneNode(true); typeA.appendChild(oA); typeB.appendChild(oB); } typeA.value = 'neocaridina'; typeB.value = 'neocaridina'; fillColorOptions(typeA.value, colorA); fillColorOptions(typeB.value, colorB); }
-function fillColorOptions(species, sel){ sel.innerHTML = ''; SPECIES[species].colors.forEach(c=>{ let o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); }); }
-function blendedColor(c1,c2){ if(c1==="검정"||c2==="검정")return"검정"; const set = new Set([c1,c2]); if(set.has("빨강")&&set.has("노랑"))return"주황"; if(set.has("파랑")&&set.has("노랑"))return"초록"; if(set.has("빨강")&&set.has("파랑"))return"보라"; if(set.has("파랑")&&set.has("초록"))return"청록"; if(set.has("갈색")||set.has("회색"))return"갈색"; if(set.has("흰색")&&set.has("검정"))return"판다무늬"; return "회색"; }
-function mutationPredict(a,b){ if(a.species!==b.species){ return {compatible:false, reason:"다른 종이라 교배 불가 또는 번식 성공률이 매우 낮아요.", probs:[]}; } let probs=[]; if(a.color===b.color){ probs.push({color:a.color,p:75}); probs.push({color:"회색",p:15}); probs.push({color:a.species==="caridina"?"스노우화이트":"투명",p:10}); return {compatible:true, probs}; } probs.push({color:blendedColor(a.color,b.color),p:35}); probs.push({color:a.color,p:20}); probs.push({color:b.color,p:20}); probs.push({color:"갈색",p:15}); probs.push({color:a.species==="caridina"?"스노우화이트":"투명",p:10}); return {compatible:true, probs}; }
-function renderResult(out){ if(!out.compatible){ result.innerHTML=`⚠️ ${out.reason}`; return; } result.innerHTML = out.probs.map(x => { const randomPattern = SHRIMP_PATTERNS[Math.floor(Math.random() * SHRIMP_PATTERNS.length)]; const finalBackground = `${randomPattern}, ${COLOR_SWATCH[x.color] || '#ddd'}`; return `<span class="chip"><span class="swatch" style="background: ${finalBackground}"></span>${x.color} <b>${x.p}%</b></span>`; }).join(''); }
-
-// ✨ 수정된 함수: 하단 도감(catalog)에도 무늬 표시
+const SPECIES = {
+  "neocaridina": { label:"생이새우", colors:["투명","갈색","회색","빨강","주황","노랑","초록","청록","파랑","남색","보라","검정","백색반점","황금빛","구리빛"] },
+  "caridina": { label:"크리스탈/타이완비새우", colors:["흰색","검정","빨강","파랑(블루볼트)","판다무늬","킹콩블랙","루비레드","모스라","스노우화이트"] },
+  "amano": { label:"야마토새우", colors:["반투명","회갈색점무늬","회색줄무늬"] }
+};
+const COLOR_SWATCH = {
+  "투명":"linear-gradient(45deg,#ffffff 25%, #e9f6fb 25% 50%, #ffffff 50% 75%, #e9f6fb 75%)",
+  "갈색":"#7a5a3a","회색":"#9aa3a8","빨강":"#e63232","주황":"#f59a23","노랑":"#ffd54a",
+  "초록":"#47b26b","청록":"#3db7b4","파랑":"#2f82ff","남색":"#1f3b8a","보라":"#7a4fd6",
+  "검정":"#111","백색반점":"repeating-linear-gradient(45deg,#ffffff 0 6px,#ffffff 6px 10px,#eaeaea 10px 16px)",
+  "황금빛":"#cfa73a","구리빛":"#b5692f",
+  "흰색":"#ffffff","파랑(블루볼트)":"#9fd3ff","판다무늬":"linear-gradient(90deg,#000 33%,#fff 33% 66%,#000 66%)",
+  "킹콩블랙":"#000000","루비레드":"#b9001a","모스라":"linear-gradient(90deg,#fff 50%,#000 50%)","스노우화이트":"#f7fbff",
+  "반투명":"linear-gradient(45deg,#ffffff 25%, #e9f6fb 25% 50%, #ffffff 50% 75%, #e9f6fb 75%)",
+  "회갈색점무늬":"repeating-radial-gradient(circle at 10px 10px,#9c7b5a 0 2px, #f3eee7 2px 8px)",
+  "회색줄무늬":"repeating-linear-gradient(90deg,#9aa3a8 0 8px,#c8d2d8 8px 16px)"
+};
+function fillSpeciesOptions(){
+  for (const key in SPECIES){
+    let oA = document.createElement('option');
+    oA.value = key; oA.textContent = SPECIES[key].label;
+    let oB = oA.cloneNode(true);
+    typeA.appendChild(oA); typeB.appendChild(oB);
+  }
+  typeA.value = 'neocaridina'; typeB.value = 'neocaridina';
+  fillColorOptions(typeA.value, colorA);
+  fillColorOptions(typeB.value, colorB);
+}
+function fillColorOptions(species, sel){
+  sel.innerHTML = '';
+  SPECIES[species].colors.forEach(c=>{
+    let o = document.createElement('option');
+    o.value = c; o.textContent = c;
+    sel.appendChild(o);
+  });
+}
+function blendedColor(c1,c2){ if(c1==="검정"||c2==="검정")return"검정"; return "회색"; }
+function mutationPredict(a,b){
+  if(a.species!==b.species){
+    return {compatible:false, reason:"다른 종이라 교배를 할 수 있지 않습니다. 서로 같은종을 선택하세요.", probs:[]};
+  }
+  let probs=[];
+  if(a.color===b.color){
+    probs.push({color:a.color,p:75});
+    probs.push({color:"회색",p:15});
+    probs.push({color:"투명",p:10});
+    return {compatible:true, probs};
+  }
+  probs.push({color:blendedColor(a.color,b.color),p:35});
+  probs.push({color:a.color,p:20});
+  probs.push({color:b.color,p:20});
+  probs.push({color:"갈색",p:15});
+  probs.push({color:"투명",p:10});
+  return {compatible:true, probs};
+}
+function renderResult(out){
+  if(!out.compatible){ result.innerHTML=`⚠️ ${out.reason}`; return; }
+  result.innerHTML = out.probs.map(x=>{
+    return `<span class="chip"><span class="swatch" style="background:${COLOR_SWATCH[x.color]||'#ddd'}"></span>${x.color} <b>${x.p}%</b></span>`;
+  }).join('');
+}
+btnPredict.onclick = ()=>{
+  let a = {species:typeA.value, color:colorA.value};
+  let b = {species:typeB.value, color:colorB.value};
+  renderResult(mutationPredict(a,b));
+};
+btnSwap.onclick = ()=>{
+  let ta=typeA.value, tb=typeB.value, ca=colorA.value, cb=colorB.value;
+  typeA.value=tb; typeB.value=ta; fillColorOptions(typeA.value,colorA); fillColorOptions(typeB.value,colorB); colorA.value=cb; colorB.value=ca;
+};
 function buildCatalog(){
   let html='';
   for(const key in SPECIES){
     SPECIES[key].colors.forEach(c=>{
-      const randomPattern = SHRIMP_PATTERNS[Math.floor(Math.random() * SHRIMP_PATTERNS.length)];
-      const finalBackground = `${randomPattern}, ${COLOR_SWATCH[c] || '#ddd'}`;
-      html+=`<div class="preview" title="${SPECIES[key].label} - ${c}" style="background: ${finalBackground}"></div>`;
+      html+=`<div class="preview" style="background:${COLOR_SWATCH[c]||'#ddd'}"></div>`;
     });
   }
   catalog.innerHTML=html;
 }
-
-btnPredict.onclick = ()=>{ let a = {species:typeA.value, color:colorA.value}; let b = {species:typeB.value, color:colorB.value}; renderResult(mutationPredict(a,b)); };
-btnSwap.onclick = ()=>{ let ta=typeA.value, tb=typeB.value, ca=colorA.value, cb=colorB.value; typeA.value=tb; typeB.value=ta; fillColorOptions(typeA.value,colorA); fillColorOptions(typeB.value,colorB); colorA.value=cb; colorB.value=ca; };
-btnShare.onclick = async () => { const shareData = { title: '새우 색 도감 + 돌연변이 예측기', text: '새우 교배 결과를 미리 예측해 보세요!', url: window.location.href }; try { if (navigator.share) { await navigator.share(shareData); } else { await navigator.clipboard.writeText(window.location.href); alert('페이지 주소가 클립보드에 복사되었어요!'); } } catch (err) { console.error("공유 실패:", err); alert('공유에 실패했어요.'); } };
-
-// ✨ 수정된 부분: 서비스 워커 등록 및 바로가기 설치 기능
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').then(registration => {
-      console.log('서비스 워커 등록 성공:', registration.scope);
-    }).catch(error => {
-      console.log('서비스 워커 등록 실패:', error);
-    });
-  });
-}
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; btnAddShortcut.style.display = 'inline-flex'; });
-btnAddShortcut.onclick = async () => { if (deferredPrompt) { deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; console.log(`사용자 선택: ${outcome}`); deferredPrompt = null; btnAddShortcut.style.display = 'none'; } };
-
 fillSpeciesOptions();
 buildCatalog();
 </script>
 </body>
 </html>
+"""
+
+# Save file
+path_no_img = "/mnt/data/shrimp_predictor_v1_1_no_images.html"
+with open(path_no_img, "w", encoding="utf-8") as f:
+    f.write(html_v11_no_img)
+
+path_no_img
