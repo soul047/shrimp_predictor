@@ -1,161 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- saved from url=(0176)file:///C:/Users/soulm/tktktk/shrimp_predictor/%EC%83%88%EC%9A%B0%20%EC%83%89%20%EB%8F%84%EA%B0%90%20+%20%EB%8F%8C%EC%97%B0%EB%B3%80%EC%9D%B4%20%EC%98%88%EC%B8%A1%EA%B8%B0.html -->
-<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><h2>예측한 것이 틀렸을 수도 있다는 점 양해 부탁 드립니다. 감사합니다. <span style="font-size:5px;"></span></h2>
+<title>🦐 새우 색 도감 + 돌연변이 예측기</title>
 
+<style>
 
+body{
+  font-family:Arial,sans-serif;
+  background:#f2fbff;
+  color:#155209;
+  padding:16px;
+}
 
+h1{
+  text-align:center;
+  color:#42aec9;
+}
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>새우 색 도감 + 돌연변이 예측기 </title>
-<link rel="icon" type="image/png" href="file:///C:/Users/maeng/OneDrive/%EC%82%AC%EC%A7%84/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/%EC%83%88%EC%9A%B0%20%EB%8F%8C%EC%97%B0%EB%B3%80%EC%9D%B4/ChatGPT%20Image%202025%EB%85%84%208%EC%9B%94%2023%EC%9D%BC%20%EC%98%A4%ED%9B%84%2001_29_15.png">
-<style>h2{text-align:center;color:#000000;}h2{text-align:center;color:#000000;}
-  body{font-family: Arial, sans-serif;background:#f2fbff;color:#155209;padding:16px;}
-  h1{text-align:center;color:#a3f1ff;}h1{text-align:center;color:#42aec9;}
-  .card{background:#fff;border:1px solid #258ce0;border-radius:12px;padding:14px;margin-bottom:16px;}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  label{display:block;margin:10px 0 4px;font-size:13px;color:#0b5b7a;}
-  select{width:100%;padding:10px;border:1px solid #9ed3e7;border-radius:10px;}
-  button{padding:10px 14px;border:none;border-radius:10px;cursor:pointer;font-weight:700;}
-  button.primary{background:#0aa3d8;color:white;}
-  .result{background:#fff;border:1px dashed #2b9981;border-radius:12px;padding:14px;}
-  .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #cfeaf3;border-radius:999px;background:#f6fbfd;margin:4px;}
-  .swatch{width:18px;height:18px;border:1px solid rgb(16, 202, 202);border-radius:4px;}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;}
-  .preview{border:1px solid #cfeaf3;border-radius:8px;overflow:hidden;background:#fff;height:80px;}
+.card{
+  background:#fff;
+  border:1px solid #258ce0;
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:16px;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+label{
+  display:block;
+  margin:10px 0 4px;
+  font-size:13px;
+}
+
+select{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #9ed3e7;
+}
+
+button{
+  padding:10px 14px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.primary{
+  background:#0aa3d8;
+  color:white;
+}
+
+.result{
+  background:#fff;
+  border:1px dashed #2b9981;
+  border-radius:12px;
+  padding:14px;
+}
+
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid #cfeaf3;
+  margin:4px;
+}
+
+.swatch{
+  width:18px;
+  height:18px;
+  border-radius:4px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:8px;
+}
+
+.preview{
+  height:80px;
+  border-radius:8px;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.hidden{
+  display:none;
+}
+
+.modal-card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  width:90%;
+  max-width:320px;
+  text-align:center;
+}
+.footer{
+
+  margin-top:30px;
+
+  padding:20px;
+
+  text-align:center;
+
+  border-top:1px solid #cfeaf3;
+
+  color:#666;
+
+  font-size:14px;
+
+}
+
+.footer a{
+
+  display:inline-block;
+
+  margin-top:8px;
+
+  color:#0aa3d8;
+
+  text-decoration:none;
+
+  font-weight:bold;
+
+}
+
+.footer a:hover{
+
+  text-decoration:underline;
+
+}
+
 </style>
+</head>
 
+<body>
 
-<h1>🦐 새우 색 도감 + 돌연변이 예측기 <span style="font-size:12px;"></span></h1>
+<h1>🦐 새우 색 도감 + 돌연변이 예측기</h1>
+
 <div class="card">
+
   <div class="row">
+
     <div>
-      <label>🦐부모 A - 종류</label>
-      <select id="typeA"><option value="neocaridina">생이새우</option><option value="caridina">크리스탈/타이완비새우</option><option value="amano">야마토새우</option><option value="neocaridina">생이새우</option><option value="caridina">크리스탈/타이완비새우</option><option value="amano">야마토새우</option></select>
-      <label>🦐부모 A - 색상</label>
-      <select id="colorA"><option value="투명">투명</option><option value="갈색">갈색</option><option value="회색">회색</option><option value="빨강">빨강</option><option value="주황">주황</option><option value="노랑">노랑</option><option value="초록">초록</option><option value="청록">청록</option><option value="파랑">파랑</option><option value="남색">남색</option><option value="보라">보라</option><option value="검정">검정</option><option value="백색반점">백색반점</option><option value="황금빛">황금빛</option><option value="구리빛">구리빛</option></select>
+
+      <label>부모 A - 종류</label>
+      <select id="typeA"></select>
+
+      <label>부모 A - 색상</label>
+      <select id="colorA"></select>
+
     </div>
+
     <div>
-      <label>🦐부모 B - 종류</label>
-      <select id="typeB"><option value="neocaridina">생이새우</option><option value="caridina">크리스탈/타이완비새우</option><option value="amano">야마토새우</option><option value="neocaridina">생이새우</option><option value="caridina">크리스탈/타이완비새우</option><option value="amano">야마토새우</option></select>
-      <label>🦐부모 B - 색상</label>
-      <select id="colorB"><option value="투명">투명</option><option value="갈색">갈색</option><option value="회색">회색</option><option value="빨강">빨강</option><option value="주황">주황</option><option value="노랑">노랑</option><option value="초록">초록</option><option value="청록">청록</option><option value="파랑">파랑</option><option value="남색">남색</option><option value="보라">보라</option><option value="검정">검정</option><option value="백색반점">백색반점</option><option value="황금빛">황금빛</option><option value="구리빛">구리빛</option></select>
+
+      <label>부모 B - 종류</label>
+      <select id="typeB"></select>
+
+      <label>부모 B - 색상</label>
+      <select id="colorB"></select>
+
     </div>
+
   </div>
+
   <div style="margin-top:12px;">
-    <button class="primary" id="btnPredict">🎲 예측하기</button>
-    <button id="btnSwap">↔️ 🦐부모 바꾸기</button>
+
+    <button id="btnPredict" class="primary">
+      🎲 예측하기
+    </button>
+
+    <button id="btnSwap">
+      ↔️ 부모 바꾸기
+    </button>
+
+  </div>
+
+</div>
+
+<div class="card">
+  <div id="result" class="result">
+    부모를 선택 후 예측하기를 눌러주세요.
   </div>
 </div>
+
 <div class="card">
-  <div id="result" class="result">부모의 종류를 1가지 선택하고 <b>'🎲 예측하기'버튼</b>을 눌러 주세요.</div>
+  <div id="catalog" class="grid"></div>
 </div>
-<div class="card">
-  <div class="grid" id="catalog"><div class="preview" style="background:linear-gradient(45deg,#ffffff 25%, #e9f6fb 25% 50%, #ffffff 50% 75%, #e9f6fb 75%)"></div><div class="preview" style="background:#7a5a3a"></div><div class="preview" style="background:#9aa3a8"></div><div class="preview" style="background:#e63232"></div><div class="preview" style="background:#f59a23"></div><div class="preview" style="background:#ffd54a"></div><div class="preview" style="background:#47b26b"></div><div class="preview" style="background:#3db7b4"></div><div class="preview" style="background:#2f82ff"></div><div class="preview" style="background:#1f3b8a"></div><div class="preview" style="background:#7a4fd6"></div><div class="preview" style="background:#111"></div><div class="preview" style="background:repeating-linear-gradient(45deg,#ffffff 0 6px,#ffffff 6px 10px,#eaeaea 10px 16px)"></div><div class="preview" style="background:#cfa73a"></div><div class="preview" style="background:#b5692f"></div><div class="preview" style="background:#ffffff"></div><div class="preview" style="background:#111"></div><div class="preview" style="background:#e63232"></div><div class="preview" style="background:#9fd3ff"></div><div class="preview" style="background:linear-gradient(90deg,#000 33%,#fff 33% 66%,#000 66%)"></div><div class="preview" style="background:#000000"></div><div class("preview" style("background:#b9001a")).</ div>
-<div class("preview" style("background:linear-gradient(90deg,#fff 50%,#000 50%)")).</ div>
-<div class("preview" style("background:#f7fbff")).</ div>
-<div class("preview" style("background:linear-gradient(45deg,#ffffff 25%, #e9f6fb 25% 50%, #ffffff 50% 75%, #e9f6fb 75%)")).</ div>
-<div class("preview" style("background:repeating-radial-gradient(circle at 10px 10px,#9c7b5a 0 2px, #f3eee7 2px 8px)")).</ div>
-<div class("preview" style("background:repeating-linear-gradient(90deg,#9aa3a8 0 8px,#c8d2d8 8px 16px)")).</ div>
 
-<script>
-const SPECIES = {
-  "neocaridina": { label:"생이새우", colors:["투명","갈색","회색","빨강","주황","노랑","초록","청록","파랑","남색","보라","검정","백색반점","황금빛","구리빛"] },
-  "caridina": { label:"크리스탈/타이완비새우", colors:["흰색","검정","빨강","파랑(블루볼트)","판다무늬","킹콩블랙","루비레드","모스라","스노우화이트"] },
-  "amano": { label:"야마토새우", colors:["반투명","회갈색점무늬","회색줄무늬"] }
-};
-const COLOR_SWATCH = {
-  "투명":"linear-gradient(45deg,#ffffff 25%, #e9f6fb 25% 50%, #ffffff 50% 75%, #e9f6fb 75%)",
-  "갈색":"#7a5a3a","회색":"#9aa3a8","빨강":"#e63232","주황":"#f59a23","노랑":"#ffd54a",
-  "초록":"#47b26b","청록":"#3db7b4","파랑":"#2f82ff","남색":"#1f3b8a","보라":"#7a4fd6",
-  "검정":"#111","백색반점":"repeating-linear-gradient(45deg,#ffffff 0 6px,#ffffff 6px 10px,#eaeaea 10px 16px)",
-  "황금빛":"#cfa73a","구리빛":"#b5692f",
-  "흰색":"#ffffff","파랑(블루볼트)":"#9fd3ff","판다무늬":"linear-gradient(90deg,#000 33%,#fff 33% 66%,#000 66%)",
-  "킹콩블랙":"#000000","루비레드":"#b9001a","모스라":"linear-gradient(90deg,#fff 50%,#000 50%)","스노우화이트":"#f7fbff",
-  "반투명":"linear-gradient(45deg,#ffffff 25%, #e9f6fb 25% 50%, #ffffff 50% 75%, #e9f6fb 75%)",
-  "회갈색점무늬":"repeating-radial-gradient(circle at 10px 10px,#9c7b5a 0 2px, #f3eee7 2px 8px)",
-  "회색줄무늬":"repeating-linear-gradient(90deg,#9aa3a8 0 8px,#c8d2d8 8px 16px)"
-};
-function fillSpeciesOptions(){
-  for (const key in SPECIES){
-    let oA = document.createElement('option');
-    oA.value = key; oA.textContent = SPECIES[key].label;
-    let oB = oA.cloneNode(true);
-    typeA.appendChild(oA); typeB.appendChild(oB);
-  }
-  typeA.value = 'neocaridina'; typeB.value = 'neocaridina';
-  fillColorOptions(typeA.value, colorA);
-  fillColorOptions(typeB.value, colorB);
-}
-function fillColorOptions(species, sel){
-  sel.innerHTML = '';
-  SPECIES[species].colors.forEach(c=>{
-    let o = document.createElement('option');
-    o.value = c; o.textContent = c;
-    sel.appendChild(o);
-  });
-}
-function blendedColor(c1,c2){ if(c1==="검정"||c2==="검정")return"검정"; return "회색"; }
-function mutationPredict(a,b){
-  if(a.species!==b.species){
-    return {compatible:false, reason:"다른 종이라 교배를 할 수 있지 않습니다. 서로 같은종을 선택하세요.", probs:[]};
-  }
-  let probs=[];
-  if(a.color===b.color){
-    probs.push({color:a.color,p:75});
-    probs.push({color:"회색",p:15});
-    probs.push({color:"투명",p:10});
-    return {compatible:true, probs};
-  }
-  probs.push({color:blendedColor(a.color,b.color),p:35});
-  probs.push({color:a.color,p:20});
-  probs.push({color:b.color,p:20});
-  probs.push({color:"갈색",p:15});
-  probs.push({color:"투명",p:10});
-  return {compatible:true, probs};
-}
-function renderResult(out){
-  if(!out.compatible){ result.innerHTML=`⚠️ ${out.reason}`; return; }
-  result.innerHTML = out.probs.map(x=>{
-    return `<span class="chip"><span class="swatch" style="background:${COLOR_SWATCH[x.color]||'#ddd'}"></span>${x.color} <b>${x.p}%</b></span>`;
-  }).join('');
-}
-btnPredict.onclick = ()=>{
-  let a = {species:typeA.value, color:colorA.value};
-  let b = {species:typeB.value, color:colorB.value};
-  renderResult(mutationPredict(a,b));
-};
-btnSwap.onclick = ()=>{
-  let ta=typeA.value, tb=typeB.value, ca=colorA.value, cb=colorB.value;
-  typeA.value=tb; typeB.value=ta; fillColorOptions(typeA.value,colorA); fillColorOptions(typeB.value,colorB); colorA.value=cb; colorB.value=ca;
-};
-function buildCatalog(){
-  let html='';
-  for(const key in SPECIES){
-    SPECIES[key].colors.forEach(c=>{
-      html+=`<div class="preview" style="background:${COLOR_SWATCH[c]||'#ddd'}"></div>`;
-    });
-  }
-  catalog.innerHTML=html;
-}
-fillSpeciesOptions();
-buildCatalog();
-</script>
+<div id="modal" class="modal hidden">
 
+  <div class="modal-card">
 
+    <h3>알림</h3>
 
-    <label>앱 소개:</label>
+    <p id="modalText"></p>
 
+    <button id="modalClose">
+      확인
+    </button>
 
+  </div>
 
-    <label>[개발자:이민후]</label>                                                                                             
+</div>
 
+<script src="index.js"></script>
 
-    <label>[스타일 지정자:이민후]</label>                                                                                            
+<footer class="footer">
 
+  <div>
+    © Copyright Minhoo Lee
+  </div>
 
+  <div>
+    <a href="minhoo_story.html">
+      앱 스토리 : 민후의 이야기
+    </a>
+  </div>
 
-    <label>[QA:이민후]</label>                                                                                          
-
-
-
-    <label>[카카오톡 문의 채널 아이디:minhoo.soul22]</label></body></html>
+</footer>
+</body>
+</html>
