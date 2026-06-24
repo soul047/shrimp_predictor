@@ -1,0 +1,27 @@
+{
+  "name": "shrimp_predictor",
+  "version": "1.0.0",
+  "description": "민후 전용 경량 웹앱. 단일 `index.html` 파일만으로 동작합니다 (이미지 없음).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soul047/shrimp_predictor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/soul047/shrimp_predictor/issues"
+  },
+  "homepage": "https://github.com/soul047/shrimp_predictor#readme",
+  "dependencies": {
+    "@capacitor/core": "^8.4.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.4.1"
+  }
+}
