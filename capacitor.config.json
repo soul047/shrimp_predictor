@@ -1,5 +1,5 @@
 {
   "appId": "com.soul047.shrimppredictor",
   "appName": "shrimp_predictor",
-  "webDir": "."
+  "www": "."
 }
