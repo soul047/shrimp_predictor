@@ -2,6 +2,7 @@ const SPECIES = {
 
   neocaridina:{
     label:"생이새우",
+    blendColor:"갈색",
     colors:[
       "투명",
       "갈색",
@@ -23,6 +24,7 @@ const SPECIES = {
 
   caridina:{
     label:"크리스탈/타이완비새우",
+    blendColor:"판다무늬",
     colors:[
       "흰색",
       "검정",
@@ -38,6 +40,7 @@ const SPECIES = {
 
   amano:{
     label:"야마토새우",
+    blendColor:"회갈색점무늬",
     colors:[
       "반투명",
       "회갈색점무늬",
@@ -139,9 +142,9 @@ modalClose.onclick=()=>{
 
 };
 
-function blendedColor(){
+function blendedColor(species){
 
-  return "회색";
+  return SPECIES[species].blendColor;
 
 }
 
@@ -154,6 +157,39 @@ function mutationPredict(a,b){
     );
 
     return null;
+
+  }
+
+  if(a.color===b.color){
+
+    const blend = blendedColor(a.species);
+
+    if(blend===a.color){
+
+      return [
+
+        {
+          color:a.color,
+          p:100
+        }
+
+      ];
+
+    }
+
+    return [
+
+      {
+        color:a.color,
+        p:80
+      },
+
+      {
+        color:blend,
+        p:20
+      }
+
+    ];
 
   }
 
@@ -170,7 +206,7 @@ function mutationPredict(a,b){
     },
 
     {
-      color:blendedColor(),
+      color:blendedColor(a.species),
       p:20
     }
 
