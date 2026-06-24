@@ -24,13 +24,17 @@ const SPECIES = {
 
   caridina:{
     label:"크리스탈/타이완비새우",
+    blendColor:"판다무늬",
     colors:[
-      "CRS",
-      "CBS",
-      "킹콩",
-      "판다",
-      "블루볼트",
-      "모스라"
+      "흰색",
+      "검정",
+      "빨강",
+      "파랑(블루볼트)",
+      "판다무늬",
+      "킹콩블랙",
+      "루비레드",
+      "모스라",
+      "스노우화이트"
     ]
   },
 
@@ -64,37 +68,18 @@ const COLOR_SWATCH = {
   "황금빛":"#cfa73a",
   "구리빛":"#b5692f",
 
-  "CRS":"#c91f2e",
-  "CBS":"#1a1a1a",
-  "킹콩":"#2b2b2b",
-  "판다":"#3a3a3a",
-  "블루볼트":"#2f6fd6",
-  "모스라":"#f2f2f2",
+  "흰색":"#ffffff",
+  "파랑(블루볼트)":"#9fd3ff",
+  "판다무늬":"#888",
+  "킹콩블랙":"#000",
+  "루비레드":"#b9001a",
+  "모스라":"#ddd",
+  "스노우화이트":"#f7fbff",
 
   "반투명":"#f8fcff",
   "회갈색점무늬":"#9c7b5a",
   "회색줄무늬":"#bcbcbc"
 };
-
-// 흰색과 다른 색이 섞인 무늬 품종은 대각선 2색으로 표시
-const PATTERN_DUO = {
-  "판다":["#111111","#ffffff"],
-  "모스라":["#f2f2f2","#ffffff"],
-  "CRS":["#c91f2e","#ffffff"],
-  "CBS":["#1a1a1a","#ffffff"]
-};
-
-function swatchStyle(name){
-
-  const duo = PATTERN_DUO[name];
-
-  if(duo){
-    return `background:linear-gradient(45deg, ${duo[0]} 0%, ${duo[0]} 49%, ${duo[1]} 51%, ${duo[1]} 100%);`;
-  }
-
-  return `background:${COLOR_SWATCH[name] || '#ccc'};`;
-
-}
 
 const SPECIES_EMOJI = {
   neocaridina:"🦐",
@@ -157,92 +142,9 @@ modalClose.onclick=()=>{
 
 };
 
-// 비쉬림프(caridina)는 색 혼합이 아니라 "품종 조합표" 방식
-// 키는 "품종A|품종B" 형태 (정렬해서 저장하므로 순서 안 타짐)
-const CARIDINA_TABLE = {
+function blendedColor(species){
 
-  "CRS|CRS":[
-    { color:"CRS", p:80 },
-    { color:"CBS", p:20 }
-  ],
-
-  "CBS|CBS":[
-    { color:"CBS", p:80 },
-    { color:"CRS", p:20 }
-  ],
-
-  "CRS|CBS":[
-    { color:"CRS", p:50 },
-    { color:"CBS", p:50 }
-  ],
-
-  "킹콩|킹콩":[
-    { color:"킹콩", p:70 },
-    { color:"판다", p:30 }
-  ],
-
-  "판다|판다":[
-    { color:"판다", p:70 },
-    { color:"킹콩", p:20 },
-    { color:"모스라", p:10 }
-  ],
-
-  "킹콩|판다":[
-    { color:"킹콩", p:50 },
-    { color:"판다", p:50 }
-  ],
-
-  "블루볼트|블루볼트":[
-    { color:"블루볼트", p:50 },
-    { color:"킹콩", p:30 },
-    { color:"모스라", p:20 }
-  ],
-
-  "킹콩|블루볼트":[
-    { color:"킹콩", p:40 },
-    { color:"판다", p:20 },
-    { color:"블루볼트", p:30 },
-    { color:"모스라", p:10 }
-  ],
-
-  "모스라|모스라":[
-    { color:"모스라", p:90 },
-    { color:"판다", p:10 }
-  ]
-
-};
-
-function caridinaKey(colorA,colorB){
-
-  return [colorA,colorB].sort().join("|");
-
-}
-
-function caridinaPredict(a,b){
-
-  const key = caridinaKey(a.color,b.color);
-
-  if(CARIDINA_TABLE[key]){
-
-    return CARIDINA_TABLE[key];
-
-  }
-
-  // 조합표에 없는 낯선 조합은 두 품종 45%씩 + 모스라 10%로 대충 뽑기
-  if(a.color===b.color){
-
-    return [
-      { color:a.color, p:90 },
-      { color:"모스라", p:10 }
-    ];
-
-  }
-
-  return [
-    { color:a.color, p:45 },
-    { color:b.color, p:45 },
-    { color:"모스라", p:10 }
-  ];
+  return SPECIES[species].blendColor;
 
 }
 
@@ -255,12 +157,6 @@ function mutationPredict(a,b){
     );
 
     return null;
-
-  }
-
-  if(a.species==="caridina"){
-
-    return caridinaPredict(a,b);
 
   }
 
@@ -328,7 +224,7 @@ function renderResult(data){
 
       <span
         class="swatch"
-        style="${swatchStyle(item.color)}">
+        style="background:${COLOR_SWATCH[item.color] || '#ccc'}">
       </span>
 
       ${item.color}
@@ -406,7 +302,7 @@ function buildCatalog(){
       <div class="pattern-item">
         <div
           class="pattern-swatch"
-          style="${swatchStyle(color)}">
+          style="background:${COLOR_SWATCH[color] || '#ccc'}">
         </div>
         <span class="pattern-label">${color}</span>
       </div>
