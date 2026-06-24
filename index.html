@@ -18,6 +18,14 @@ body{
 h1{
   text-align:center;
   color:#42aec9;
+  margin-bottom:6px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#7fb9c9;
+  font-size:13px;
+  margin:0 0 16px;
 }
 
 .card{
@@ -47,27 +55,46 @@ select{
   border:1px solid #9ed3e7;
 }
 
+.button-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:14px;
+  margin:18px 0;
+}
+
 button{
-
-  min-width:220px;
-
-  padding:14px 24px;
-
+  flex:1 1 220px;
+  max-width:280px;
+  min-width:200px;
+  padding:16px 24px;
   border:none;
-
-  border-radius:12px;
-
+  border-radius:14px;
   cursor:pointer;
-
   font-weight:bold;
+  font-size:17px;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
 
-  font-size:16px;
+button:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(10,163,216,0.25);
+}
 
+button:active{
+  transform:translateY(0);
 }
 
 .primary{
   background:#0aa3d8;
   color:white;
+}
+
+#btnSwap{
+  background:#fff;
+  color:#0aa3d8;
+  border:2px solid #0aa3d8;
 }
 
 .result{
@@ -93,15 +120,56 @@ button{
   border-radius:4px;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-  gap:8px;
+.catalog-title{
+  text-align:center;
+  font-size:14px;
+  font-weight:bold;
+  color:#42aec9;
+  margin:0 0 14px;
 }
 
-.preview{
-  height:80px;
-  border-radius:8px;
+.species-group{
+  margin-bottom:18px;
+}
+
+.species-group:last-child{
+  margin-bottom:0;
+}
+
+.species-title{
+  font-size:14px;
+  font-weight:bold;
+  color:#155209;
+  margin:0 0 10px;
+  padding-bottom:6px;
+  border-bottom:2px dashed #cfeaf3;
+}
+
+.pattern-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(84px,1fr));
+  gap:10px;
+}
+
+.pattern-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  text-align:center;
+}
+
+.pattern-swatch{
+  width:100%;
+  height:50px;
+  border-radius:10px;
+  border:1px solid rgba(0,0,0,.08);
+}
+
+.pattern-label{
+  font-size:11px;
+  color:#155209;
+  line-height:1.2;
 }
 
 .modal{
@@ -126,40 +194,33 @@ button{
   max-width:320px;
   text-align:center;
 }
+
 .footer{
-
   margin-top:30px;
-
   padding:20px;
-
   text-align:center;
-
   border-top:1px solid #cfeaf3;
-
   color:#666;
-
   font-size:14px;
-
 }
 
 .footer a{
-
   display:inline-block;
-
   margin-top:8px;
-
   color:#0aa3d8;
-
   text-decoration:none;
-
   font-weight:bold;
-
 }
 
 .footer a:hover{
-
   text-decoration:underline;
+}
 
+@media (max-width:420px){
+  button{
+    flex:1 1 100%;
+    max-width:none;
+  }
 }
 
 </style>
@@ -168,6 +229,7 @@ button{
 <body>
 
 <h1>🦐 새우 색 도감 + 돌연변이 예측기</h1>
+<p class="subtitle">✨ 재미를 위한 예측입니다 ✨</p>
 
 <div class="card">
 
@@ -195,15 +257,17 @@ button{
 
   </div>
 
-<div class="button-row">
+  <div class="button-row">
 
-  <button id="btnPredict" class="primary">
-    🎲 예측하기
-  </button>
+    <button id="btnPredict" class="primary">
+      🎲 예측하기
+    </button>
 
-  <button id="btnSwap">
-    ↔️ 부모 바꾸기
-  </button>
+    <button id="btnSwap">
+      ↔️ 부모 바꾸기
+    </button>
+
+  </div>
 
 </div>
 
@@ -214,7 +278,8 @@ button{
 </div>
 
 <div class="card">
-  <div id="catalog" class="grid"></div>
+  <div class="catalog-title">📖 상위종별 색 패턴 도감</div>
+  <div id="catalog"></div>
 </div>
 
 <div id="modal" class="modal hidden">
@@ -244,7 +309,9 @@ button{
       앱 스토리 : 민후의 이야기
     </a>
   </div>
-<script src="index.js"></script>
+
 </footer>
+
+<script src="index.js"></script>
 </body>
 </html>

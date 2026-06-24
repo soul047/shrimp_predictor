@@ -78,6 +78,12 @@ const COLOR_SWATCH = {
   "회색줄무늬":"#bcbcbc"
 };
 
+const SPECIES_EMOJI = {
+  neocaridina:"🦐",
+  caridina:"💎",
+  amano:"🌊"
+};
+
 function fillSpeciesOptions(){
 
   typeA.innerHTML="";
@@ -248,16 +254,27 @@ function buildCatalog(){
 
   for(const key in SPECIES){
 
+    const emoji = SPECIES_EMOJI[key] || "🦐";
+
+    html+=`<div class="species-group">`;
+    html+=`<div class="species-title">${emoji} ${SPECIES[key].label}</div>`;
+    html+=`<div class="pattern-grid">`;
+
     SPECIES[key].colors.forEach(color=>{
 
       html+=`
-      <div
-        class="preview"
-        style="background:${COLOR_SWATCH[color] || '#ccc'}">
+      <div class="pattern-item">
+        <div
+          class="pattern-swatch"
+          style="background:${COLOR_SWATCH[color] || '#ccc'}">
+        </div>
+        <span class="pattern-label">${color}</span>
       </div>
       `;
 
     });
+
+    html+=`</div></div>`;
 
   }
 
